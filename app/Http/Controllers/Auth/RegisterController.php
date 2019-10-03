@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Project\User\Data\User;
+use Project\User\Domain\User as UserAlias;
+use Webpatser\Uuid\Uuid;
 
 class RegisterController extends Controller
 {
@@ -28,7 +32,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/login';
 
     /**
      * Create a new controller instance.
@@ -58,15 +62,21 @@ class RegisterController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
-     * @return \App\User
+     * @param array $data
+     * @return \Illuminate\Database\Eloquent\Model
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        $user = new UserAlias();
+        $user->setEmail($data['email']);
+        $user->setPassword(Hash::make($data['password']));
+        $user->setRole(1);
+        $user->setSessionId(Session::getId());
+        $user->setActive(true);
+        $user->save();
+        return $user->getModel();
     }
+
+
+
 }

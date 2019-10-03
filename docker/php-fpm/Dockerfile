@@ -1,7 +1,11 @@
 FROM alpine:latest
 
+COPY php.ini /etc/php7/conf.d/php.ini
+COPY www.conf /etc/php7/php-fpm.d/www.conf
+
 RUN apk add --update \
     php7-fpm \
+    php7-pdo_pgsql \
     php7-apcu \
     php7-ctype \
     php7-curl \
@@ -32,15 +36,12 @@ RUN apk add --update \
     make \
     curl
 
-RUN rm -rf /var/cache/apk/* && rm -rf /tmp/* && \
-    curl -sS https://getcomposer.org/composer.phar -o /usr/bin/composer && chmod +x /usr/bin/composer
+RUN curl -sS https://getcomposer.org/composer.phar -o /usr/bin/composer && chmod +x /usr/bin/composer
 
-ADD xdebug.ini  /etc/php7/conf.d/
-
-ADD laravel.pool.conf /etc/php7/php-fpm.d/
-
-WORKDIR /var/www/app
-
-EXPOSE 9001
-
+RUN addgroup -g 1000 -S app && \
+    adduser -u 1000 -S app -G app
+RUN chown -R app /var/log/
+WORKDIR /app
+RUN chown -R app /app
+USER app
 CMD ["php-fpm7", "-F"]

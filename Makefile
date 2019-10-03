@@ -1,12 +1,10 @@
-PHP := php
-
 install: build up composer-update node-install init
 
 help:
 	@echo 'Youhou'
 
 up:
-	@docker-compose up -d nginx
+	@docker-compose up -d
 
 stop:
 	@docker-compose stop
@@ -21,11 +19,11 @@ shell:
 
 .PHONY: composer-update
 composer-update:
-	@docker-compose exec $(PHP) composer update --prefer-dist
+	@docker-compose exec php composer update --prefer-dist
 
 .PHONY: composer-install
 composer-install:
-	@docker-compose exec $(PHP) composer install --prefer-dist
+	@docker-compose exec php composer install --prefer-dist
 
 .PHONY: node-install
 node-install:
@@ -35,11 +33,11 @@ asset:
 	@docker-compose run node yarn run assets
 
 node:
-	@docker-compose run node
+	@docker-compose run node sh
 
 build:
 	$(info Make: Building images.)
-	docker-compose build
+	@docker-compose build
 
 down:
 	docker-compose down
