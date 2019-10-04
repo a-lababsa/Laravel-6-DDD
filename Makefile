@@ -32,8 +32,14 @@ node-install:
 asset:
 	@docker-compose run node yarn run assets
 
+node-up:
+	@docker-compose up node
+
 node:
 	@docker-compose run --rm node sh
+
+exec-node:
+	@docker-compose exec node sh
 
 build:
 	$(info Make: Building images.)

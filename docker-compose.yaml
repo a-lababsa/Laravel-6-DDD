@@ -38,9 +38,13 @@ services:
       - pgsql
     restart: always
   node:
+    container_name: node
     build: ./docker/node
     volumes:
       - ./:/app
+    network_mode: host
+    command: >
+      sh -c "yarn"
 networks:
   default:
     driver: bridge
