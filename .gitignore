@@ -3,7 +3,7 @@ node_modules/
 .idea/
 logs/
 tests/
-app/storage/
+storage/
 .env
 composer.lock
 yarn.lock

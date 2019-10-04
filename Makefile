@@ -33,7 +33,7 @@ asset:
 	@docker-compose run node yarn run assets
 
 node:
-	@docker-compose run node sh
+	@docker-compose run --rm node sh
 
 build:
 	$(info Make: Building images.)
